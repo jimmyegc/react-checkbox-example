@@ -37,7 +37,7 @@ function App() {
           </ProductCard.Info>
         }
         action={
-          <ProductCard.Button onClick={addToCart}>Add to cart</ProductCard.Button>
+          <ProductCard.Button onClick={addToCart}>Add to cart accion </ProductCard.Button>
         }
       />
     </>
