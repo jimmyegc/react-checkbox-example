@@ -1,47 +1,45 @@
-import './App.css'
-import { Checkbox } from './components/Checkbox'
-import { Checkword } from './components/Checkword'
-import { Users } from './components/Users'
-import ProductCard from './ProductCard/ProductCard';
-import { Product } from './types';
-import useProduct from './useProduct';
+import { useState } from 'react';
 
+// HOC que agrega la funcionalidad de conteo
+const withCounter = (WrappedComponent) => {
+  const WithCounter = () => {
+    const [count, setCount] = useState(0);
 
-const product: Product = {
-  id: 1,
-  image: 'https://iili.io/HCURIHu.jpg',
-  title: 'Viston Earl Grey Tea',
-  category: 'Black Tea',
-  rating: { stars: 4, reviews: 4 },
-  price: 8.95,
+    const handleClick = () => {
+      setCount(count + 1);
+      console.log(count)
+    };
+
+    return <WrappedComponent handleClick={handleClick} count={count} />;
+  };
+
+  return WithCounter;
 };
 
-function App() {
-  const { addToCart } = useProduct(product);
+// ComponenteA sin la funcionalidad de conteo
+const ComponenteA = ({ handleClick, count }) => {
+  return <button onClick={handleClick}>Componente A {count} </button>;
+};
 
+// ComponenteB sin la funcionalidad de conteo
+const ComponenteB = ({ handleClick }) => {
+  return <button onClick={handleClick}>Componente B</button>;
+};
 
+// Envolver ComponenteA y ComponenteB con el HOC
+const ComponenteAConConteo = withCounter(ComponenteA);
+const ComponenteBConConteo = withCounter(ComponenteB);
+
+// Renderizar ComponenteA y ComponenteB con la funcionalidad de conteo agregada
+export const App = () => {
   return (
     <>
-      <Checkbox />
-      <Checkword />
-      <Users />
-      <ProductCard
-        product={product}
-        image={<ProductCard.Image />}
-        info={
-          <ProductCard.Info>
-            <ProductCard.Category />
-            <ProductCard.Title />
-            <ProductCard.Rating />
-            <ProductCard.Price />
-          </ProductCard.Info>
-        }
-        action={
-          <ProductCard.Button onClick={addToCart}>Add to cart accion </ProductCard.Button>
-        }
-      />
+      <h1>HOC</h1>
+      <ComponenteAConConteo />
+      <br />
+      <ComponenteBConConteo />
     </>
-  )
-}
+  );
+};
 
-export default App
+
